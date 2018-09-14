@@ -15,4 +15,9 @@ var source = require("vinyl-source-stream");
 var buffer = require("vinyl-buffer");
 var browserSync = require('browser-sync').create();
 
+gulp.task('default', defaultTask);
 
+function defaultTask(done) {
+    console.log("default fonctionne bien !!!");
+    done();
+}
