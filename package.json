@@ -13,6 +13,11 @@
         "my",
         "website"
     ],
+    "homepage": "https://github.com/elyesturki/gulp-compiler-static-website.git/README.md",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/elyesturki/gulp-compiler-static-website.git"
+    },
     "author": "Elyes.T",
     "license": "ISC",
     "devDependencies": {
