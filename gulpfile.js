@@ -18,7 +18,7 @@ var gutil = require('gulp-util');
 var clean = require('gulp-clean');
 var pump = require('pump');
 var browserSync = require('browser-sync').create();
-//var reload = browserSync.reload;
+var reload = browserSync.reload;
 
 var config = {
     cssFiles: {
@@ -26,7 +26,7 @@ var config = {
         source: [
             'css/font-awesome.min.css',
             'css/bootstrap.min.css',
-            'css/style.css', 
+            'css/style.css',
             'css/responsive.css',
         ],
         dest: 'dist/css',
@@ -89,7 +89,7 @@ gulp.task('compress:js-plugins', function() {
         //.on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
         .pipe(concat(config.pluginsJsFiles.concatName))
         .pipe(sourcemaps.write('.'))
-        .pipe(clean({force: true}))
+        .pipe(clean({ force: true }))
         .pipe(gulp.dest(config.pluginsJsFiles.dest))
         .on('finish', function() {
             console.log("compress pluginsJsFiles files OK !!!");
@@ -108,7 +108,7 @@ gulp.task('compress:css', function() {
         .pipe(concat(config.cssFiles.concatName))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(config.cssFiles.dest))
-       // .pipe(browserSync.stream())
+        // .pipe(browserSync.stream())
         .on('finish', function() {
             console.log("compress cssFiles files OK !!!");
         });
@@ -143,10 +143,9 @@ gulp.task('browser-sync', function() {
 });
 
 //gulp task app
-gulp.task('build', ['compress:css', 'compress:js' ]);
+gulp.task('build', ['compress:css', 'compress:js']);
 
-gulp.task('watch', ['build', 'browser-sync' ], function() {
-    gulp.watch( config.cssFiles.dest ['compress:css', reload]);
-    gulp.watch( config.jsFiles.dest, ['compress:js', reload]);
+gulp.task('watch', ['build', 'browser-sync'], function() {
+    gulp.watch(config.cssFiles.source, ['compress:css']).on('change', reload);
+    gulp.watch(config.jsFiles.source, ['compress:js']).on('change', reload);
 });
-
