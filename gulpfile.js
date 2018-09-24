@@ -21,6 +21,7 @@ var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
 
 var config = {
+    src: './dist',
     cssFiles: {
         //source: 'css/**/*.css',
         source: [
@@ -38,13 +39,18 @@ var config = {
             'js/jquery-3.2.1.min.js',
             'js/popper.min.js',
             'js/bootstrap.min.js',
-            'js/theme.js'
+            'js/theme.js',
+            'js/contact.js'
         ],
         dest: 'dist/js',
         concatName: 'app.js'
     },
+    imgFiles: {
+        source: './img',
+        dest: 'dist/img',
+    },
     htmlFiles: {
-        source: '*.html',
+        source: './*.html',
         dest: 'dist/',
     },
     pluginsCssFiles: {
@@ -75,24 +81,9 @@ gulp.task('compress:js', function() {
         .pipe(concat(config.jsFiles.concatName))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(config.jsFiles.dest))
-        //.pipe(browserSync.stream())
+        .pipe(browserSync.stream())
         .on('finish', function() {
             console.log("compress jsFiles files OK !!!");
-        });
-});
-
-// task js plugins compression
-gulp.task('compress:js-plugins', function() {
-    return gulp.src(config.pluginsJsFiles.source)
-        .pipe(sourcemaps.init())
-        //.pipe(uglify())
-        //.on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
-        .pipe(concat(config.pluginsJsFiles.concatName))
-        .pipe(sourcemaps.write('.'))
-        .pipe(clean({ force: true }))
-        .pipe(gulp.dest(config.pluginsJsFiles.dest))
-        .on('finish', function() {
-            console.log("compress pluginsJsFiles files OK !!!");
         });
 });
 
@@ -108,44 +99,47 @@ gulp.task('compress:css', function() {
         .pipe(concat(config.cssFiles.concatName))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(config.cssFiles.dest))
-        // .pipe(browserSync.stream())
+        .pipe(browserSync.stream())
         .on('finish', function() {
             console.log("compress cssFiles files OK !!!");
         });
 });
 
-// task css plugins compression
-gulp.task('compress:css-plugins', function() {
-    return gulp.src(config.pluginsCssFiles.source)
-        .pipe(stripCssComments())
-        .pipe(sourcemaps.init())
-        .pipe(cleanCSS({
-            relativeTo: config.pluginsCssFiles.dest,
-            target: config.pluginsCssFiles.dest,
-        }))
-        .pipe(concat(config.pluginsCssFiles.concatName))
-        .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(config.pluginsCssFiles.dest))
-        .on('finish', function() {
-            console.log("compress plugins css files OK !!!");
-        });
-});
-
 gulp.task('browser-sync', function() {
     browserSync.init({
-        open: false,
+       // open: false,
         injectChanges: true,
         //proxy: 'http://gulpwebsite.dev',
         server: {
-            baseDir: './'
+            baseDir: config.src
         }
     })
 });
 
+//task cpy images
+gulp.task('imagesCopy', function() {
+    return gulp.src('./img/**/*.{gif,jpg,png,svg}')
+        .pipe(gulp.dest(config.imgFiles.dest))
+  });
+
+//task compress html
+gulp.task("compress:html", function(event) {
+    return gulp.src(config.htmlFiles.source)
+    .pipe(htmlmin({ collapseWhitespace: true }))
+    .pipe(gulp.dest(config.htmlFiles.dest));
+});
+
+gulp.task('cleanjs', function () {
+    return gulp.src('dist/**/*.js', {read: false})
+    //.pipe(clean({ force: true }))
+      .pipe(clean());
+  });
+
 //gulp task app
-gulp.task('build', ['compress:css', 'compress:js']);
+gulp.task('build', ['compress:css', 'compress:js', 'compress:html', 'imagesCopy']);
 
 gulp.task('watch', ['build', 'browser-sync'], function() {
-    gulp.watch(config.cssFiles.source, ['compress:css']).on('change', reload);
-    gulp.watch(config.jsFiles.source, ['compress:js']).on('change', reload);
+    gulp.watch(config.jsFiles.source, ['compress:js',reload]);
+    gulp.watch(config.cssFiles.source, ['compress:css',reload]);
+    gulp.watch(config.htmlFiles.source, ['compress:html',reload]);
 });

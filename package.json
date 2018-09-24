@@ -37,6 +37,8 @@
         "gulp-concat": "^2.6.1",
         "gulp-connect": "^5.6.1",
         "gulp-htmlmin": "^5.0.1",
+        "gulp-ignore-errors": "0.0.4",
+        "gulp-livereload": "^4.0.0",
         "gulp-rename": "^1.4.0",
         "gulp-sourcemaps": "^2.6.4",
         "gulp-strip-css-comments": "^2.0.0",
