@@ -38,6 +38,7 @@
         "gulp-connect": "^5.6.1",
         "gulp-htmlmin": "^5.0.1",
         "gulp-ignore-errors": "0.0.4",
+        "gulp-imagemin": "^4.1.0",
         "gulp-livereload": "^4.0.0",
         "gulp-rename": "^1.4.0",
         "gulp-sourcemaps": "^2.6.4",

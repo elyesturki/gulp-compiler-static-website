@@ -17,6 +17,7 @@ var stripCssComments = require('gulp-strip-css-comments');
 var gutil = require('gulp-util');
 var clean = require('gulp-clean');
 var pump = require('pump');
+var imagemin = require('gulp-imagemin');
 var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
 
@@ -123,9 +124,10 @@ gulp.task('browser-sync', function() {
     })
 });
 
-//task cpy images
-gulp.task('imagesCopy', function() {
+//task compress images
+gulp.task('compress:img', function() {
     return gulp.src('./img/**/*.{gif,jpg,png,svg}')
+        .pipe(imagemin())
         .pipe(gulp.dest(config.imgFiles.dest))
   });
 
@@ -143,7 +145,7 @@ gulp.task('cleanjs', function () {
   });
 
 //gulp task app
-gulp.task('build', ['compress:css', 'compress:js', 'compress:html', 'imagesCopy']);
+gulp.task('build', ['compress:css', 'compress:js', 'compress:html', 'compress:img']);
 
 gulp.task('watch', ['build', 'browser-sync'], function() {
     gulp.watch(config.jsFiles.source, ['compress:js',reload]);
