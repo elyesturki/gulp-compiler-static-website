@@ -65,6 +65,11 @@ var config = {
     },
 };
 
+function errorLog (error) {
+ console.error.bind(error);
+ this.emit('end');
+}
+
 //gulp default test
 gulp.task('default', defaultTask);
 
@@ -78,6 +83,7 @@ gulp.task('compress:js', function() {
     return gulp.src(config.jsFiles.source)
         .pipe(sourcemaps.init())
         .pipe(uglify())
+        .on('error', errorLog)
         .pipe(concat(config.jsFiles.concatName))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(config.jsFiles.dest))
@@ -91,6 +97,7 @@ gulp.task('compress:js', function() {
 gulp.task('compress:css', function() {
     return gulp.src(config.cssFiles.source)
         .pipe(stripCssComments())
+        .on('error', errorLog)
         .pipe(sourcemaps.init())
         .pipe(cleanCSS({
             relativeTo: config.cssFiles.dest,
