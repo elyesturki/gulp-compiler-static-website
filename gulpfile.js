@@ -18,6 +18,7 @@ var gutil = require('gulp-util');
 var clean = require('gulp-clean');
 var pump = require('pump');
 var imagemin = require('gulp-imagemin');
+var runSequence = require('run-sequence');
 var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
 
@@ -138,16 +139,16 @@ gulp.task("compress:html", function(event) {
     .pipe(gulp.dest(config.htmlFiles.dest));
 });
 
-gulp.task('cleanjs', function () {
+gulp.task('clean', function () {
     return gulp.src('dist/**/*.js', {read: false})
-    //.pipe(clean({ force: true }))
-      .pipe(clean());
+      .pipe(clean({ force: true }))
   });
 
 //gulp task app
 gulp.task('build', ['compress:css', 'compress:js', 'compress:html', 'compress:img']);
 
-gulp.task('watch', ['build', 'browser-sync'], function() {
+gulp.task('watch', function(callback) {
+    runSequence('clean', 'build', 'browser-sync',callback);
     gulp.watch(config.jsFiles.source, ['compress:js',reload]);
     gulp.watch(config.cssFiles.source, ['compress:css',reload]);
     gulp.watch(config.htmlFiles.source, ['compress:html',reload]);

@@ -14,6 +14,7 @@
 >npm install --save-dev gulp-babel @babel/core @babel/preset-env gulp-util gulp-clean pump --save-dev
 >npm install --save-dev gulp-strip-css-comments
 >npm install --save-dev gulp-ignore-errors
+npm install --save-dev run-sequence
 
 >npm audit (optionnal and to igniore)
 
