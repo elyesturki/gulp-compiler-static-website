@@ -48,12 +48,16 @@ var config = {
         concatName: 'app.js'
     },
     imgFiles: {
-        source: './img',
+        source: './img/**/*.{gif,jpg,png,svg}',
         dest: 'dist/img',
     },
     htmlFiles: {
         source: './*.html',
         dest: 'dist/',
+    },
+    fontsFiles: {
+        source: './fonts/**/*.*',
+        dest: 'dist/fonts',
     },
     pluginsCssFiles: {
         source: 'plugins/**/*.css',
@@ -132,6 +136,12 @@ gulp.task('compress:img', function() {
         .pipe(gulp.dest(config.imgFiles.dest))
   });
 
+//task copy font
+gulp.task('fonts', function() {
+    return gulp.src(config.fontsFiles.source)
+        .pipe(gulp.dest(config.fontsFiles.dest))
+  });
+
 //task compress html
 gulp.task("compress:html", function(event) {
     return gulp.src(config.htmlFiles.source)
@@ -145,7 +155,7 @@ gulp.task('clean', function () {
   });
 
 //gulp task app
-gulp.task('build', ['compress:css', 'compress:js', 'compress:html', 'compress:img']);
+gulp.task('build', ['compress:css', 'compress:js', 'compress:html', 'compress:img', 'fonts']);
 
 gulp.task('watch', function(callback) {
     runSequence('clean', 'build', 'browser-sync',callback);
